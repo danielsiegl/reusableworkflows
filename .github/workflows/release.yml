@@ -1,1 +1,33 @@
+name: Push of Tag 
+on:
+    release:
 
+jobs:
+    TestOnWindows:
+        runs-on: windows-latest
+        needs: build
+        timeout-minutes: 15
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                fetch-depth: 0 # Mandatory to use the extract version from tag action
+        
+            - name: Extract version from tag
+              id: tagversion
+              uses: damienaicheh/extract-version-from-tag-action@v1.1.0
+            
+            - name: Output Readme
+              shell: pwsh
+              run: |          
+                    
+                   Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
+                   Write-Output "${{ steps.tagversion.outputs.MAJOR }}" >> $env:GITHUB_STEP_SUMMARY
+                   Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
+                   Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
+              
+    call-workflow-passing-data:
+        uses: ./.github/workflows/build.yml
+        with:
+            config-path: .github/labeler.yml
+        secrets: inherit
