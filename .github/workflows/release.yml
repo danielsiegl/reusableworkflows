@@ -11,6 +11,8 @@ jobs:
     prepareVersion:
         runs-on: windows-latest
         timeout-minutes: 15
+        outputs:
+            versionString: ${{ steps.get_version.outputs.version-without-v }}
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -23,15 +25,10 @@ jobs:
 
             - name: Output Readme
               shell: pwsh
-              run: |    
-                    Write-Output "Version=${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV  
-                    
+              run: |       
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
                     Write-Output "# ${{ steps.get_version.outputs.version-without-v }}" >> $env:GITHUB_STEP_SUMMARY
-                    Write-Output "# ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $env:GITHUB_STEP_SUMMARY
                     
-                    Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
-                    Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
 
     outputVersion:
         needs: prepareVersion
@@ -41,13 +38,13 @@ jobs:
             - name: Output Version
               shell: pwsh
               run: |    
-                    
-                    Write-Output "# ${{ env.Version }}" >> $env:GITHUB_STEP_SUMMARY            
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
+                    Write-Output "# Version: ${{needs.prepareVersion.outputs.versionString}}" >> $env:GITHUB_STEP_SUMMARY            
+                    
         
     build:
         uses: ./.github/workflows/build.yml
         needs: prepareVersion
         with:
-            version: $Version
+            version: ${{needs.prepareVersion.outputs.versionString}}
         secrets: inherit

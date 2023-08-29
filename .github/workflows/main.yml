@@ -6,11 +6,24 @@ on:
         - main
 jobs:
     
+    prepareVersion:
+        runs-on: windows-latest
+        timeout-minutes: 15
+        outputs:
+            versionString: ${{vars.PRODUCTVERSION}} 
+        steps:
+            - name: Output Readme
+              shell: pwsh
+              run: |       
+                    Write-Output "# main.yml" >> $env:GITHUB_STEP_SUMMARY
+                    Write-Output "# ${{vars.PRODUCTVERSION}} " >> $env:GITHUB_STEP_SUMMARY
+
+
     call-workflow-passing-data:
-       
+        needs: prepareVersion
         uses: ./.github/workflows/build.yml
         with:
-            version: '${{env.ProductVersion}}'
+            version: ${{needs.prepareVersion.outputs.versionString}} 
         secrets: inherit
     
       
