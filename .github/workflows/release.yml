@@ -21,10 +21,10 @@ jobs:
               shell: pwsh
               run: |          
                     
-                   Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
-                   Write-Output "${{ steps.tagversion.outputs.MAJOR }}" >> $env:GITHUB_STEP_SUMMARY
-                   Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
-                   Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
+                    Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
+                    Write-Output "${{ steps.tagversion.outputs.MAJOR }}" >> $env:GITHUB_STEP_SUMMARY
+                    Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
+                    Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
               
     call-workflow-passing-data:
         uses: ./.github/workflows/build.yml
