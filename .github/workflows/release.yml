@@ -28,23 +28,11 @@ jobs:
               run: |       
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
                     Write-Output "# ${{ steps.get_version.outputs.version-without-v }}" >> $env:GITHUB_STEP_SUMMARY
-                    
-
-    outputVersion:
-        needs: prepareVersion
-        runs-on: windows-latest
-        timeout-minutes: 15
-        steps:
-            - name: Output Version
-              shell: pwsh
-              run: |    
-                    Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
-                    Write-Output "# Version: ${{needs.prepareVersion.outputs.versionString}}" >> $env:GITHUB_STEP_SUMMARY            
-                    
-        
-    build:
+                          
+    call-build-workflow:
         uses: ./.github/workflows/build.yml
         needs: prepareVersion
         with:
             version: ${{needs.prepareVersion.outputs.versionString}}
+            runs-on: windows-latest
         secrets: inherit

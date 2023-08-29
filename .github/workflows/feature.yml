@@ -1,1 +1,28 @@
+name: Push on main 
 
+on:
+    push:
+      branches-ignore:
+        - main
+jobs:
+    
+    prepareVersion:
+        runs-on: windows-latest
+        timeout-minutes: 15
+        outputs:
+            versionString: ${{vars.PRODUCTVERSION}} 
+        steps:
+            - name: Output Readme
+              shell: pwsh
+              run: |       
+                    Write-Output "# main.yml" >> $env:GITHUB_STEP_SUMMARY
+                    Write-Output "# ${{vars.PRODUCTVERSION}} " >> $env:GITHUB_STEP_SUMMARY
+
+
+    call-build-workflow:
+        needs: prepareVersion
+        uses: ./.github/workflows/build.yml
+        with:
+            version: ${{needs.prepareVersion.outputs.versionString}} 
+            runs-on: windows-latest
+        secrets: inherit

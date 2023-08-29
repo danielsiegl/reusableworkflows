@@ -24,6 +24,7 @@ jobs:
         uses: ./.github/workflows/build.yml
         with:
             version: ${{needs.prepareVersion.outputs.versionString}} 
+            runs-on: windows-latest
         secrets: inherit
     
       
