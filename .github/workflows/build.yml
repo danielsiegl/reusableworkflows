@@ -22,7 +22,7 @@ jobs:
             - name: Output Readme
               shell: pwsh
               run: |  
-                   Write-Output "# ${{ inputs.version }}" >> $env:GITHUB_STEP_SUMMARY     
+                   Write-Output "# Version: ${{ inputs.version }}" >> $env:GITHUB_STEP_SUMMARY     
                    Write-Output "# build.yml" >> $env:GITHUB_STEP_SUMMARY
                    Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
          

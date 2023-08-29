@@ -32,10 +32,7 @@ jobs:
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
                     Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
 
-            
-              
-            
-              
+               
     build:
         uses: ./.github/workflows/build.yml
         needs: prepareVersion
