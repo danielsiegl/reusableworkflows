@@ -1,4 +1,6 @@
 name: Push on main 
+env: 
+    Version: $ProductVersion
 on:
     push:
       branches:
@@ -8,7 +10,7 @@ jobs:
     call-workflow-passing-data:
         uses: ./.github/workflows/build.yml
         with:
-            config-path: .github/labeler.yml
+            version: $Version
         secrets: inherit
     
       

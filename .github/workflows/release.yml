@@ -1,4 +1,8 @@
 name: Push of Tag 
+
+env: 
+    Version: "0.0.0"
+
 on:
     release:
       types: [created]
@@ -9,18 +13,18 @@ jobs:
         timeout-minutes: 15
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
               with:
                 fetch-depth: 0 # Mandatory to use the extract version from tag action
         
             - name: Extract version from tag
               id: get_version
               uses: battila7/get-version-action@v2
-            
+
             - name: Output Readme
               shell: pwsh
-              run: |          
-                    
+              run: |    
+                    Write-Output "Version=$${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV     
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
                     Write-Output "# ${{ steps.get_version.outputs.version-without-v }}" >> $env:GITHUB_STEP_SUMMARY
                     Write-Output "# ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $env:GITHUB_STEP_SUMMARY
@@ -36,5 +40,5 @@ jobs:
         uses: ./.github/workflows/build.yml
         needs: prepareVersion
         with:
-            config-path: .github/labeler.yml
+            version: $Version
         secrets: inherit

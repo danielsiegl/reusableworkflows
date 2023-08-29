@@ -1,9 +1,13 @@
 name: Reusable workflow example
 
 on:
+  push:
+    branches-ignore:
+        main
+
   workflow_call:
     inputs:
-      config-path:
+      version:
         required: true
         type: string
 
@@ -16,9 +20,9 @@ jobs:
               uses: actions/checkout@v3.4.0
             
             - name: Output Readme
-              id: modelcheck
               shell: pwsh
-              run: |          
+              run: |  
+                   Write-Output "# ${{ inputs.version }}" >> $env:GITHUB_STEP_SUMMARY     
                    Write-Output "# build.yml" >> $env:GITHUB_STEP_SUMMARY
                    Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
          
