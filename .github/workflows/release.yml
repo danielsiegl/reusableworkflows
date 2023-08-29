@@ -1,6 +1,7 @@
 name: Push of Tag 
 on:
     release:
+      types: [created]
 
 jobs:
     prepareVersion:
