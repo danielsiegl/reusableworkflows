@@ -1,6 +1,5 @@
 name: Push on main 
-env: 
-    Version: $ProductVersion
+
 on:
     push:
       branches:
@@ -8,9 +7,10 @@ on:
 jobs:
     
     call-workflow-passing-data:
+       
         uses: ./.github/workflows/build.yml
         with:
-            version: "4.5.6"
+            version: '${{env.ProductVersion}}'
         secrets: inherit
     
       
