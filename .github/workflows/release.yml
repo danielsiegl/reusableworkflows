@@ -24,10 +24,25 @@ jobs:
             - name: Output Readme
               shell: pwsh
               run: |    
-                    Write-Output "Version=$${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV     
+                    Write-Output "Version=${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV  
+                    
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
                     Write-Output "# ${{ steps.get_version.outputs.version-without-v }}" >> $env:GITHUB_STEP_SUMMARY
                     Write-Output "# ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $env:GITHUB_STEP_SUMMARY
+                    
+                    Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
+                    Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
+
+    outputVersion:
+        needs: prepareVersion
+        runs-on: windows-latest
+        timeout-minutes: 15
+        steps:
+            - name: Output Version
+              shell: pwsh
+              run: |    
+                    
+                    Write-Output "# ${{ env.Version }}" >> $env:GITHUB_STEP_SUMMARY
                     
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
                     Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
