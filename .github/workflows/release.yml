@@ -3,9 +3,8 @@ on:
     release:
 
 jobs:
-    TestOnWindows:
+    prepareVersion:
         runs-on: windows-latest
-        needs: build
         timeout-minutes: 15
         steps:
             - name: Checkout
@@ -26,8 +25,9 @@ jobs:
                     Write-Output "# release.yml" >> $env:GITHUB_STEP_SUMMARY
                     Get-Content "README.md" >> $env:GITHUB_STEP_SUMMARY
               
-    call-workflow-passing-data:
+    build:
         uses: ./.github/workflows/build.yml
+        needs: prepareVersion
         with:
             config-path: .github/labeler.yml
         secrets: inherit
